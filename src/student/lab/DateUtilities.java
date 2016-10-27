@@ -4,9 +4,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
 
 /**
  * This class may provide assistance in terms of certain date manipulation
@@ -21,23 +23,43 @@ import java.time.format.DateTimeFormatter;
 
 public class DateUtilities {
     /**
-     * Returns the Duration between two LocalTime objects in Minutes.
-     * @param startTime Starting LocalTime object
-     * @param endTime Ending LocalTime object
-     * @return Duration object representing difference between two LocalTime 
+     * Returns the Duration between two Temporal objects in Minutes.
+     * @param startingTemporalObject Starting Temporal object
+     * @param endingTemporalObject Ending Temporal object
+     * @return Duration object representing difference between two Temporal 
      * objects
-     * @throws IllegalArgumentException checks if any provided LocalTime objects
+     * @throws IllegalArgumentException checks if any provided Temporal objects
      * are null
      */
-    public static Duration timeDifferenceInMinutes(LocalTime startTime,
-            LocalTime endTime) throws IllegalArgumentException {
-        if(startTime == null || endTime == null){
+    public static Duration timeDifferenceInMinutes(Temporal 
+            startingTemporalObject, Temporal endingTemporalObject) throws 
+            IllegalArgumentException {
+        if(startingTemporalObject == null || endingTemporalObject == null){
             throw new IllegalArgumentException("Only valid LocalTime objects "
                     + "accepted. ");
         }
-        Duration difference = Duration.between(startTime, endTime);
+        Duration difference = Duration.between(startingTemporalObject, 
+                endingTemporalObject);
         return Duration.ofMinutes(difference.toMinutes());
-
+    }
+    /**
+     * Returns a long representation of the time difference between two 
+     * Temporal objects
+     * @param startingTemporalObject Starting Temporal object
+     * @param endingTemporalObject Ending Temporal object
+     * @return long representation of the number of hours between the two
+     * dates represented by the two provided Temporal objects.
+     * @throws IllegalArgumentException checks if any provided Temporal objects
+     * are null
+     */
+    public static long timeDifferenceInHours(Temporal 
+            startingTemporalObject, Temporal endingTemporalObject){
+        if(startingTemporalObject == null || endingTemporalObject == null){
+            throw new IllegalArgumentException("Only valid LocalTime objects "
+                    + "accepted. ");
+        }
+        return Duration.between(startingTemporalObject, 
+                endingTemporalObject).toHours();
     }
     /**
      * Parses a String representation of a LocalDateTime object to an actual
@@ -107,7 +129,8 @@ public class DateUtilities {
      * representation, based on the format provided. 
      * @param localDateTime to be formatted
      * @param localDateTimeFormat format to use for LocalDateTime provided 
-     * (Must use valid symbols and patterns used by DateTimeFormatter)
+     * (Must use valid symbols and patterns used by DateTimeFormatter class)
+     * Ex: "MM/dd/yyyy h:mm:ss a"
      * @return formatted String representation of LocalDateTime
      * @throws IllegalArgumentException checks to see if provided LocalDateTime
      * object is null and if the provided format String is null or empty.
@@ -129,7 +152,8 @@ public class DateUtilities {
      * representation, based on the format provided. 
      * @param localDate to be formatted
      * @param localDateFormat format to use for LocalDate provided 
-     * (Must use valid symbols and patterns used by DateTimeFormatter)
+     * (Must use valid symbols and patterns used by DateTimeFormatter class)
+     * Ex: "MM/dd/yyyy"
      * @return formatted String representation of LocalDate
      * @throws IllegalArgumentException checks to see if provided LocalDate
      * object is null and if the provided format String is null or empty.
@@ -151,7 +175,8 @@ public class DateUtilities {
      * representation, based on the format provided. 
      * @param localTime to be formatted
      * @param localTimeFormat format to use for LocalDate provided 
-     * (Must use valid symbols and patterns used by DateTimeFormatter)
+     * (Must use valid symbols and patterns used by DateTimeFormatter class)
+     * Ex: "H:mm:ss a"
      * @return formatted String representation of LocalTime
      * @throws IllegalArgumentException checks to see if provided LocalTime
      * object is null and if the provided format String is null or empty.
@@ -167,6 +192,12 @@ public class DateUtilities {
         DateTimeFormatter formatter
                 = DateTimeFormatter.ofPattern(localTimeFormat);
         return formatter.format(localTime);
+    }
+    public static void main(String[] args) {
+        System.out.println(DateUtilities.timeDifferenceInHours(
+                LocalDateTime.now(), LocalDateTime.now().plusDays(3L)));
+        
+                
     }
 
 }
